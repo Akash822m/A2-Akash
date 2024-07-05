@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin: 30px 0;
+            color: #333;
+            font-size: 2em;
+        }
+        #gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            width: 90%;
+            max-width: 1200px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Gallery</h1>
+    <div id="gallery"></div>
+
+    <script>
+        async function fetchAllImages() {
+            try {
+                const response = await fetch('/fetch-all');
+                const images = await response.json();
+
+                const galleryContainer = document.getElementById('gallery');
+                galleryContainer.innerHTML = '';
+
+                images.forEach(image => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = `/uploads/${image}`;
+                    imgElement.alt = image;
+                    galleryContainer.appendChild(imgElement);
+                });
+            } catch (error) {
+                console.error('Error fetching all images:', error);
+            }
+        }
+
+        fetchAllImages();
+    </script>
+</body>
+</html>

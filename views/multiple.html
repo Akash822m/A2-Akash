@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Images</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e0e0e0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+           
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .images-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .images-container img {
+            width: 100%;
+            height: auto;
+            
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .images-container img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Multiple Random Images</h1>
+        <button id="fetchButton">Fetch Multiple Images</button>
+        <div id="images" class="images-container"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fetchButton = document.getElementById('fetchButton');
+            fetchButton.addEventListener('click', fetchMultipleImages);
+        });
+
+        async function fetchMultipleImages() {
+            try {
+                const response = await fetch('/fetch-multiple');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch images');
+                }
+                const images = await response.json();
+
+                const imagesContainer = document.getElementById('images');
+                imagesContainer.innerHTML = '';
+
+                images.forEach(image => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = `/uploads/${image}`;
+                    imgElement.alt = image;
+                    imagesContainer.appendChild(imgElement);
+                });
+            } catch (error) {
+                console.error('Error fetching multiple images:', error);
+                // Optionally, display an error message to the user
+            }
+        }
+    </script>
+</body>
+</html>
